@@ -63,11 +63,11 @@ export default function ToDoList() {
                     </ButtonGroup>
                     {Tasks.map((task) => {
                         if (AppareTasks === "all") {
-                            return <Task id = {task.id} key={task.id} title={task.title} description={task.description} IsCompleted={task.IsCompleted} />;
+                            return <Task task={task} key={task.id} />;
                         }else if (AppareTasks === "active" && task.IsCompleted === false) {
-                            return <Task id = {task.id} key={task.id} title={task.title} description={task.description} IsCompleted={task.IsCompleted} />;
+                            return <Task task={task} key={task.id} />;
                         }else if (AppareTasks === "completed" && task.IsCompleted === true) {
-                            return <Task id = {task.id} key={task.id} title={task.title} description={task.description} IsCompleted={task.IsCompleted} />;
+                            return <Task task={task} key={task.id} />;
                         }
                         return null;
                     })}

@@ -7,18 +7,18 @@ import { Card, IconButton, ClickAwayListener,Portal, Box, Button } from '@mui/ma
 import { useContext } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
 
-export default function Task({ id , title = "Task Title", description = "Task description goes here..." , IsCompleted = true }) {
+export default function Task({task , id , title = "Task Title", description = "Task description goes here..." , IsCompleted = true }) {
     let [openUpdatePopup, setOpenUpdatePopup] = useState(false);
     let [openDeletePopup, setOpenDeletePopup] = useState(false);
-    let [UpdateTaskTitle, setUpdateTaskTitle] = useState(title);
-    let [UpdateTaskDescription, setUpdateTaskDescription] = useState(description);
+    let [UpdateTaskTitle, setUpdateTaskTitle] = useState(task.title);
+    let [UpdateTaskDescription, setUpdateTaskDescription] = useState(task.description);
     
     let { Tasks, setTasks } = useContext(TasksContext);
 
     let CheckIconStyle = {
-        backgroundColor: IsCompleted ? '#04f629' : '#ffffff',
-        color: IsCompleted ? '#ffffff' : '#04f629',
-        border : IsCompleted ?'2px solid #ffffff' : '2px solid #04f629',
+        backgroundColor: task.IsCompleted ? '#04f629' : '#ffffff',
+        color: task.IsCompleted ? '#ffffff' : '#04f629',
+        border : task.IsCompleted ?'2px solid #ffffff' : '2px solid #04f629',
         marginRight: '10px',
         boxShadow: '0 7px 7px rgba(0,0,0,0.7)',
         '&:hover': {
@@ -73,15 +73,15 @@ export default function Task({ id , title = "Task Title", description = "Task de
     };
 
     function UbdateTask() {
-        let updatedTasks = Tasks.map((task) => {
-            if (task.id === id) {
+        let updatedTasks = Tasks.map((t) => {
+            if (t.id === task.id) {
                 return {
-                    ...task,
+                    ...t,
                     title: UpdateTaskTitle,
                     description: UpdateTaskDescription
                 };
             }
-            return task;
+            return t;
         });
         // update the tasks in localStorage
         localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
@@ -92,7 +92,7 @@ export default function Task({ id , title = "Task Title", description = "Task de
     }
 
     function DeleteTask() {
-        let updatedTasks = Tasks.filter((task) => task.id !== id);
+        let updatedTasks = Tasks.filter((t) => t.id !== task.id);
         // update the tasks in localStorage
         localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
         updatedTasks = JSON.parse(localStorage.getItem("Tasks"));
@@ -102,14 +102,14 @@ export default function Task({ id , title = "Task Title", description = "Task de
     }
 
     function taskCompleted() {
-        let updatedTasks = Tasks.map((task) => {
-            if (task.id === id) {
+        let updatedTasks = Tasks.map((t) => {
+            if (t.id === task.id) {
                 return {
-                    ...task,
+                    ...t,
                     IsCompleted: !task.IsCompleted,
                 };
             }
-            return task;
+            return t;
         });
         // update the tasks in localStorage
         localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
@@ -137,8 +137,8 @@ export default function Task({ id , title = "Task Title", description = "Task de
                 }
             }}>
                 <div style={{ flex: 1 }}>
-                    <h3 style={{ margin: 0 , textDecoration: IsCompleted ? 'line-through' : 'none'  }}>{title}</h3>
-                    <p style={{ margin: '5px 20px 0 0', fontSize: '14px', color: '#e0e0e0' }}>{description}</p>
+                    <h3 style={{ margin: 0 , textDecoration: task.IsCompleted ? 'line-through' : 'none'  }}>{task.title}</h3>
+                    <p style={{ margin: '5px 20px 0 0', fontSize: '14px', color: '#e0e0e0' }}>{task.description}</p>
                 </div>
                 
                 <div >
