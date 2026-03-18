@@ -9,7 +9,6 @@ import Task from './Task';
 import AddTask from './AddTask';
 import { useEffect, useState } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
-import CustomizedSnackbar from './Snackbar';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function ToDoList() {
@@ -73,10 +72,8 @@ export default function ToDoList() {
                     })}
                     <div style={{ position: 'absolute', bottom: 0 }}>
                         <AddTask />
-                        <CustomizedSnackbar />
                     </div>
                 </Box>
-
             </Card>
         </TasksContext.Provider>
     );

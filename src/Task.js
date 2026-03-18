@@ -3,15 +3,15 @@ import CheckIcon from '@mui/icons-material/Check';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
-import { Card, IconButton, ClickAwayListener,Portal, Box, Button } from '@mui/material';
+import { Card, IconButton, ClickAwayListener} from '@mui/material';
 import { useContext } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
+import UpdateDialog from './UpdateDialog';
+import DeleteDialog from './DeleteDialog';
 
-export default function Task({task , id , title = "Task Title", description = "Task description goes here..." , IsCompleted = true }) {
+export default function Task({task}) {
     let [openUpdatePopup, setOpenUpdatePopup] = useState(false);
     let [openDeletePopup, setOpenDeletePopup] = useState(false);
-    let [UpdateTaskTitle, setUpdateTaskTitle] = useState(task.title);
-    let [UpdateTaskDescription, setUpdateTaskDescription] = useState(task.description);
     
     let { Tasks, setTasks } = useContext(TasksContext);
 
@@ -46,19 +46,6 @@ export default function Task({task , id , title = "Task Title", description = "T
         }
     }
 
-    let styles = {
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        borderRadius: '12px',
-        boxShadow: 24,
-        p: 4,
-        zIndex: 1300,
-    };
-
     let AppareUpdatePopup = () => {
         setOpenUpdatePopup((prev) => !prev);
     };
@@ -71,35 +58,6 @@ export default function Task({task , id , title = "Task Title", description = "T
         setOpenUpdatePopup(false);
         setOpenDeletePopup(false);
     };
-
-    function UbdateTask() {
-        let updatedTasks = Tasks.map((t) => {
-            if (t.id === task.id) {
-                return {
-                    ...t,
-                    title: UpdateTaskTitle,
-                    description: UpdateTaskDescription
-                };
-            }
-            return t;
-        });
-        // update the tasks in localStorage
-        localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
-        updatedTasks = JSON.parse(localStorage.getItem("Tasks"));
-        // update the tasks 
-        setTasks(updatedTasks);
-        setOpenUpdatePopup(false);
-    }
-
-    function DeleteTask() {
-        let updatedTasks = Tasks.filter((t) => t.id !== task.id);
-        // update the tasks in localStorage
-        localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
-        updatedTasks = JSON.parse(localStorage.getItem("Tasks"));
-        // update the tasks
-        setTasks(updatedTasks);
-        setOpenUpdatePopup(false);
-    }
 
     function taskCompleted() {
         let updatedTasks = Tasks.map((t) => {
@@ -155,40 +113,17 @@ export default function Task({task , id , title = "Task Title", description = "T
                     </IconButton>
                 </div>
 
-                {openUpdatePopup ? (
-                    <Portal>
-                        <Box sx={styles}>
-                            <input
-                                value={UpdateTaskTitle} 
-                                onChange={(e) => setUpdateTaskTitle(e.target.value)} 
-                                type="text"
-                                placeholder="Task title" 
-                                style={{ width: '100%', marginBottom: '10px' }} 
-                            />
-                            <textarea 
-                                value={UpdateTaskDescription} 
-                                onChange={(e) => setUpdateTaskDescription(e.target.value)} 
-                                placeholder="Task description" 
-                                style={{ width: '100%', marginBottom: '10px' }} 
-                            />
-                            <Button 
-                            onClick={UbdateTask}
-                            variant="contained" color="primary" fullWidth>Save changes</Button>
-                        </Box>
-                    </Portal>
-                ) : null}
+                <UpdateDialog 
+                    open={openUpdatePopup}
+                    task={task}
+                    setOpenUpdatePopup={setOpenUpdatePopup}
+                />
 
-                {openDeletePopup ? (
-                    <Portal>
-                        <Box sx={styles}>
-                            <h2>Are you sure you want to delete this task?</h2>
-                            <Button 
-                            onClick={DeleteTask}
-                            variant="contained" color="warning" fullWidth>delete task</Button>
-                        </Box>
-                    </Portal>
-                ) : null}
-
+                <DeleteDialog
+                    open={openDeletePopup}
+                    task={task}
+                    setOpenDeletePopup={setOpenDeletePopup}
+                />
             </Card>
         </ClickAwayListener>
     );
