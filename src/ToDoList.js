@@ -10,9 +10,16 @@ import AddTask from './AddTask';
 import { useEffect, useState } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
 import { v4 as uuidv4 } from 'uuid';
+import DeleteDialog from './DeleteDialog';
+import UpdateDialog from './UpdateDialog';
 
 export default function ToDoList() {
     let [AppareTasks, setAppareTasks] = useState("all");
+
+    let [SelectedTask, setSelectedTask] = useState({});
+
+    let [openDeletePopup, setOpenDeletePopup] = useState(false);
+    let [openUpdatePopup, setOpenUpdatePopup] = useState(false);
 
     const [Tasks, setTasks] = useState([
         {
@@ -26,7 +33,11 @@ export default function ToDoList() {
     useEffect(() => {
         setTasks(JSON.parse(localStorage.getItem("Tasks")) || []);
     }, []);
-    
+
+    function SelectTask(task) {
+        setSelectedTask(task);
+    }
+
     return (
         <TasksContext.Provider value={{ Tasks, setTasks }}>
             <Card style={{maxHeight: "80vh",overflow:"scroll"}} sx={{ minWidth: 275 }}>
@@ -62,11 +73,11 @@ export default function ToDoList() {
                     </ButtonGroup>
                     {Tasks.map((task) => {
                         if (AppareTasks === "all") {
-                            return <Task task={task} key={task.id} />;
+                            return <Task task={task} key={task.id} setOpenDeletePopup={setOpenDeletePopup} AppareUpdatePopup={() => setOpenUpdatePopup(true)} SelectTask={SelectTask} />;
                         }else if (AppareTasks === "active" && task.IsCompleted === false) {
-                            return <Task task={task} key={task.id} />;
+                            return <Task task={task} key={task.id} setOpenDeletePopup={setOpenDeletePopup} AppareUpdatePopup={() => setOpenUpdatePopup(true)} SelectTask={SelectTask} />;
                         }else if (AppareTasks === "completed" && task.IsCompleted === true) {
-                            return <Task task={task} key={task.id} />;
+                            return <Task task={task} key={task.id} setOpenDeletePopup={setOpenDeletePopup} AppareUpdatePopup={() => setOpenUpdatePopup(true)} SelectTask={SelectTask} />;
                         }
                         return null;
                     })}
@@ -75,6 +86,19 @@ export default function ToDoList() {
                     </div>
                 </Box>
             </Card>
+
+            <UpdateDialog 
+                open={openUpdatePopup}
+                task={SelectedTask}
+                CoverUpdatePopup={() => setOpenUpdatePopup(false)}
+            />
+
+            <DeleteDialog
+                open={openDeletePopup}
+                task={SelectedTask}
+                setOpenDeletePopup={setOpenDeletePopup}
+            />
+
         </TasksContext.Provider>
     );
 }

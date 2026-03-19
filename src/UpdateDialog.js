@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useContext } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
 
-export default function UpdateDialog({ open , task , setOpenUpdatePopup }) {
+export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
     let { Tasks, setTasks } = useContext(TasksContext);
     let [UpdateTaskTitle, setUpdateTaskTitle] = useState(task.title);
     let [UpdateTaskDescription, setUpdateTaskDescription] = useState(task.description);
@@ -21,10 +21,6 @@ export default function UpdateDialog({ open , task , setOpenUpdatePopup }) {
         boxShadow: 24,
         p: 4,
         zIndex: 1300,
-    };
-
-    const handleClose = () => {
-        setOpenUpdatePopup(false);
     };
 
     function UbdateTask() {
@@ -43,29 +39,33 @@ export default function UpdateDialog({ open , task , setOpenUpdatePopup }) {
         updatedTasks = JSON.parse(localStorage.getItem("Tasks"));
         // update the tasks 
         setTasks(updatedTasks);
-        setOpenUpdatePopup(false);
     }
+
+    const handleClose = () => {
+        CoverUpdatePopup();
+    };
+
 
     return (
         <Dialog onClose={handleClose} open={open}>
-        <Box sx={styles}>
-            <input
-                value={UpdateTaskTitle} 
-                onChange={(e) => setUpdateTaskTitle(e.target.value)} 
-                type="text"
-                placeholder="Task title" 
-                style={{ width: '100%', marginBottom: '10px' }} 
-            />
-            <textarea 
-                value={UpdateTaskDescription} 
-                onChange={(e) => setUpdateTaskDescription(e.target.value)} 
-                placeholder="Task description" 
-                style={{ width: '100%', marginBottom: '10px' }} 
-            />
-            <Button 
-            onClick={UbdateTask}
-            variant="contained" color="primary" fullWidth>Save changes</Button>
-        </Box>
+            <Box sx={styles}>
+                <input
+                    value={UpdateTaskTitle} 
+                    onChange={(e) => setUpdateTaskTitle(e.target.value)} 
+                    type="text"
+                    placeholder="Task title" 
+                    style={{ width: '100%', marginBottom: '10px' }} 
+                />
+                <textarea 
+                    value={UpdateTaskDescription} 
+                    onChange={(e) => setUpdateTaskDescription(e.target.value)} 
+                    placeholder="Task description" 
+                    style={{ width: '100%', marginBottom: '10px' }} 
+                />
+                <Button 
+                onClick={UbdateTask}
+                variant="contained" color="primary" fullWidth>Save changes</Button>
+            </Box>
         </Dialog>
     );
 }
@@ -73,5 +73,5 @@ export default function UpdateDialog({ open , task , setOpenUpdatePopup }) {
 UpdateDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     task: PropTypes.object.isRequired,
-    setOpenUpdatePopup: PropTypes.func.isRequired
+    CoverUpdatePopup: PropTypes.func.isRequired
 };

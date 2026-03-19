@@ -6,13 +6,8 @@ import { useState } from 'react';
 import { Card, IconButton, ClickAwayListener} from '@mui/material';
 import { useContext } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
-import UpdateDialog from './UpdateDialog';
-import DeleteDialog from './DeleteDialog';
 
-export default function Task({task}) {
-    let [openUpdatePopup, setOpenUpdatePopup] = useState(false);
-    let [openDeletePopup, setOpenDeletePopup] = useState(false);
-    
+export default function Task({task , setOpenDeletePopup , SelectTask , AppareUpdatePopup}) {    
     let { Tasks, setTasks } = useContext(TasksContext);
 
     let CheckIconStyle = {
@@ -46,17 +41,8 @@ export default function Task({task}) {
         }
     }
 
-    let AppareUpdatePopup = () => {
-        setOpenUpdatePopup((prev) => !prev);
-    };
-
     let AppareDeletePopup = () => {
         setOpenDeletePopup((prev) => !prev);
-    };
-    
-    let closePopup = () => {
-        setOpenUpdatePopup(false);
-        setOpenDeletePopup(false);
     };
 
     function taskCompleted() {
@@ -76,55 +62,47 @@ export default function Task({task}) {
         setTasks(updatedTasks);
     }
 
+    SelectTask(task);
+
+    function HandleEditClick() {
+        AppareUpdatePopup()
+    }
+
     return (
-        <ClickAwayListener onClickAway={closePopup}>
-            <Card sx={{
-                backgroundColor: '#033566',
-                color: 'white', 
-                width: 400, 
-                margin: '15px auto',
-                padding: '15px',
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                transition: 'all 0.3s ease',
-                transformOrigin: 'top',
-                '&:hover': {
-                    transform: 'scaleY(1.05)',
-                    boxShadow: '0 10px 20px rgba(0,0,0,0.3)',
-                }
-            }}>
-                <div style={{ flex: 1 }}>
-                    <h3 style={{ margin: 0 , textDecoration: task.IsCompleted ? 'line-through' : 'none'  }}>{task.title}</h3>
-                    <p style={{ margin: '5px 20px 0 0', fontSize: '14px', color: '#e0e0e0' }}>{task.description}</p>
-                </div>
+        <Card sx={{
+            backgroundColor: '#033566',
+            color: 'white', 
+            width: 400, 
+            margin: '15px auto',
+            padding: '15px',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            transition: 'all 0.3s ease',
+            transformOrigin: 'top',
+            '&:hover': {
+                transform: 'scaleY(1.05)',
+                boxShadow: '0 10px 20px rgba(0,0,0,0.3)',
+            }
+        }}>
+            <div style={{ flex: 1 }}>
+                <h3 style={{ margin: 0 , textDecoration: task.IsCompleted ? 'line-through' : 'none'  }}>{task.title}</h3>
+                <p style={{ margin: '5px 20px 0 0', fontSize: '14px', color: '#e0e0e0' }}>{task.description}</p>
+            </div>
+            
+            <div >
+                <IconButton onClick={taskCompleted} sx={CheckIconStyle} aria-label="complete" size="small" color="primary" >
+                    <CheckIcon />
+                </IconButton>
+
+                <IconButton onClick={HandleEditClick} sx={EditIconStyle} aria-label="edit" size="small" color="success" >
+                    <BorderColorIcon />
+                </IconButton>
                 
-                <div >
-                    <IconButton onClick={taskCompleted} sx={CheckIconStyle} aria-label="complete" size="small" color="primary" >
-                        <CheckIcon />
-                    </IconButton>
-
-                    <IconButton onClick={AppareUpdatePopup} sx={EditIconStyle} aria-label="edit" size="small" color="success" >
-                        <BorderColorIcon />
-                    </IconButton>
-                    
-                    <IconButton onClick={AppareDeletePopup} sx={DeleteIconStyle} aria-label="delete" size="small" color="warning" >
-                        <DeleteIcon />
-                    </IconButton>
-                </div>
-
-                <UpdateDialog 
-                    open={openUpdatePopup}
-                    task={task}
-                    setOpenUpdatePopup={setOpenUpdatePopup}
-                />
-
-                <DeleteDialog
-                    open={openDeletePopup}
-                    task={task}
-                    setOpenDeletePopup={setOpenDeletePopup}
-                />
-            </Card>
-        </ClickAwayListener>
+                <IconButton onClick={AppareDeletePopup} sx={DeleteIconStyle} aria-label="delete" size="small" color="warning" >
+                    <DeleteIcon />
+                </IconButton>
+            </div>
+        </Card>
     );
 }
