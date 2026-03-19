@@ -12,7 +12,6 @@ import { TasksContext } from './Contexts/TasksContext';
 import { v4 as uuidv4 } from 'uuid';
 import DeleteDialog from './DeleteDialog';
 import UpdateDialog from './UpdateDialog';
-import CustomizedSnackbar from './Snackbar';
 export default function ToDoList() {
     let [AppareTasks, setAppareTasks] = useState("all");
 
@@ -84,7 +83,6 @@ export default function ToDoList() {
                     ))}
                     <div style={{ position: 'absolute', bottom: 0 }}>
                         <AddTask />
-                        <CustomizedSnackbar/>
                     </div>
                 </Box>
             </Card>

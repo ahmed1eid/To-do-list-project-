@@ -3,11 +3,14 @@ import CheckIcon from '@mui/icons-material/Check';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Card, IconButton} from '@mui/material';
-import { useContext } from 'react';
+import { useContext , useState } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
+import CustomizedSnackbar from './Snackbar';
 
-export default function Task({task , AppareDeletePopup , SelectTask , AppareUpdatePopup}) {    
+export default function Task({task , AppareDeletePopup , SelectTask , AppareUpdatePopup}) {
     let { Tasks, setTasks } = useContext(TasksContext);
+
+    let [OpenSnackBar, SetOpenSnackBar] = useState(false);
 
     let CheckIconStyle = {
         backgroundColor: task.IsCompleted ? '#04f629' : '#ffffff',
@@ -40,6 +43,10 @@ export default function Task({task , AppareDeletePopup , SelectTask , AppareUpda
         }
     }
 
+    const OpenSnackbarFunc = () => {
+        SetOpenSnackBar(true);
+    };
+
     function taskCompleted() {
         let updatedTasks = Tasks.map((t) => {
             if (t.id === task.id) {
@@ -55,6 +62,7 @@ export default function Task({task , AppareDeletePopup , SelectTask , AppareUpda
         updatedTasks = JSON.parse(localStorage.getItem("Tasks"));
         // update the tasks
         setTasks(updatedTasks);
+        OpenSnackbarFunc();
     }
 
     function HandleEditClick() {
@@ -68,40 +76,44 @@ export default function Task({task , AppareDeletePopup , SelectTask , AppareUpda
     }
 
     return (
-        <Card sx={{
-            backgroundColor: '#033566',
-            color: 'white', 
-            width: 400, 
-            margin: '15px auto',
-            padding: '15px',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            transition: 'all 0.3s ease',
-            transformOrigin: 'top',
-            '&:hover': {
-                transform: 'scaleY(1.05)',
-                boxShadow: '0 10px 20px rgba(0,0,0,0.3)',
-            }
-        }}>
-            <div style={{ flex: 1 }}>
-                <h3 style={{ margin: 0 , textDecoration: task.IsCompleted ? 'line-through' : 'none'  }}>{task.title}</h3>
-                <p style={{ margin: '5px 20px 0 0', fontSize: '14px', color: '#e0e0e0' }}>{task.description}</p>
-            </div>
-            
-            <div >
-                <IconButton onClick={taskCompleted} sx={CheckIconStyle} aria-label="complete" size="small" color="primary" >
-                    <CheckIcon />
-                </IconButton>
-
-                <IconButton onClick={HandleEditClick} sx={EditIconStyle} aria-label="edit" size="small" color="success" >
-                    <BorderColorIcon />
-                </IconButton>
+        <>
+            <Card sx={{
+                backgroundColor: '#033566',
+                color: 'white', 
+                width: 400, 
+                margin: '15px auto',
+                padding: '15px',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                transition: 'all 0.3s ease',
+                transformOrigin: 'top',
+                '&:hover': {
+                    transform: 'scaleY(1.05)',
+                    boxShadow: '0 10px 20px rgba(0,0,0,0.3)',
+                }
+            }}>
+                <div style={{ flex: 1 }}>
+                    <h3 style={{ margin: 0 , textDecoration: task.IsCompleted ? 'line-through' : 'none'  }}>{task.title}</h3>
+                    <p style={{ margin: '5px 20px 0 0', fontSize: '14px', color: '#e0e0e0' }}>{task.description}</p>
+                </div>
                 
-                <IconButton onClick={HandleDeleteClick} sx={DeleteIconStyle} aria-label="delete" size="small" color="warning" >
-                    <DeleteIcon />
-                </IconButton>
-            </div>
-        </Card>
+                <div >
+                    <IconButton onClick={taskCompleted} sx={CheckIconStyle} aria-label="complete" size="small" color="primary" >
+                        <CheckIcon />
+                    </IconButton>
+
+                    <IconButton onClick={HandleEditClick} sx={EditIconStyle} aria-label="edit" size="small" color="success" >
+                        <BorderColorIcon />
+                    </IconButton>
+                    
+                    <IconButton onClick={HandleDeleteClick} sx={DeleteIconStyle} aria-label="delete" size="small" color="warning" >
+                        <DeleteIcon />
+                    </IconButton>
+                </div>
+            </Card>
+            {/* عرض Snackbar بعد تحديث المهمة */}
+            {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage={task.IsCompleted ? `Task (${task.title}) was successfully completed` : `Task (${task.title}) is still active`} />}
+        </>
     );
 }

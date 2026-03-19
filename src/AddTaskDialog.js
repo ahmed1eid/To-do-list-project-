@@ -5,10 +5,12 @@ import { Box } from '@mui/material';
 import { useContext , useState } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
 import { v4 as uuidv4 } from 'uuid';
+import CustomizedSnackbar from './Snackbar';
 
 export default function AddTaskDialog({ open , setOpen }) {
-    const [NewtaskTitle, setNewTaskTitle] = useState('');
-    const [NewtaskDescription, setNewTaskDescription] = useState('');
+    let [OpenSnackBar, SetOpenSnackBar] = useState(false);
+    let [NewtaskTitle, setNewTaskTitle] = useState('');
+    let [NewtaskDescription, setNewTaskDescription] = useState('');
     let { Tasks, setTasks } = useContext(TasksContext);
     let styles = {
         position: 'fixed',
@@ -27,6 +29,10 @@ export default function AddTaskDialog({ open , setOpen }) {
         setOpen(false);
     };
 
+    const OpenSnackbarFunc = () => {
+        SetOpenSnackBar(true);
+    };
+
     const SaveTask = () => {
         const newTask = {
         id: uuidv4(),
@@ -34,33 +40,42 @@ export default function AddTaskDialog({ open , setOpen }) {
         description: NewtaskDescription,
         IsCompleted: false
         };
+
         setTasks([...Tasks, newTask]);
-        // update the tasks in localStorage
+
         localStorage.setItem("Tasks", JSON.stringify([...Tasks, newTask]));
+
         setNewTaskTitle('');
         setNewTaskDescription('');
+
         setOpen(false);
+        
+        OpenSnackbarFunc();
     };
 
     return (
-        <Dialog onClose={handleClose} open={open}>
-            <Box sx={styles}>
-                <input 
-                value={NewtaskTitle} 
-                onChange={(e) => setNewTaskTitle(e.target.value)} 
-                type="text"
-                placeholder="Task title" 
-                style={{ width: '100%', marginBottom: '10px' }} 
-                />
-                <textarea 
-                value={NewtaskDescription} 
-                onChange={(e) => setNewTaskDescription(e.target.value)} 
-                placeholder="Task description" 
-                style={{ width: '100%', marginBottom: '10px' }} 
-                />
-                <Button onClick={SaveTask} variant="contained" color="primary" fullWidth>Save Task</Button>
-            </Box>
-        </Dialog>
+        <>
+            <Dialog onClose={handleClose} open={open}>
+                <Box sx={styles}>
+                    <input 
+                    value={NewtaskTitle} 
+                    onChange={(e) => setNewTaskTitle(e.target.value)} 
+                    type="text"
+                    placeholder="Task title" 
+                    style={{ width: '100%', marginBottom: '10px' }} 
+                    />
+                    <textarea 
+                    value={NewtaskDescription} 
+                    onChange={(e) => setNewTaskDescription(e.target.value)} 
+                    placeholder="Task description" 
+                    style={{ width: '100%', marginBottom: '10px' }} 
+                    />
+                    <Button onClick={SaveTask} variant="contained" color="primary" fullWidth>Save Task</Button>
+                </Box>
+            </Dialog>
+            {/* عرض Snackbar بعد تحديث المهمة */}
+            {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage="Task has been added successfully" />}
+        </>
     );
 }
 

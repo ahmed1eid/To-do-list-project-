@@ -31,16 +31,12 @@ export default function DeleteDialog({ open , task , CoverDeletePopup }) {
     };
 
     function DeleteTask() {
-        // 1. إنشاء المصفوفة الجديدة بدون العنصر المراد حذفه
         const updatedTasks = Tasks.filter((t) => t.id !== task.id);
         
-        // 2. تحديث الحالة (State) فوراً لتحديث الواجهة
         setTasks(updatedTasks);
         
-        // 3. حفظ النسخة الجديدة في التخزين المحلي
         localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
         
-        // 4. إغلاق النافذة
         CoverDeletePopup();
 
         OpenSnackbarFunc();
@@ -57,7 +53,7 @@ export default function DeleteDialog({ open , task , CoverDeletePopup }) {
             </Box>
         </Dialog>
         {/* عرض Snackbar بعد حذف المهمة */}
-        {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage="Task deleted successfully" />}
+        {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage="Task was deleted successfully" />}
         </>
     );
 }

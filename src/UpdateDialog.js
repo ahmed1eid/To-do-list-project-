@@ -8,7 +8,7 @@ import { TasksContext } from './Contexts/TasksContext';
 import CustomizedSnackbar from './Snackbar';
 
 export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
-    const [OpenSnackBar, SetOpenSnackBar] = useState(false);
+    let [OpenSnackBar, SetOpenSnackBar] = useState(false);
     let { Tasks, setTasks } = useContext(TasksContext);
     let [UpdateTaskTitle, setUpdateTaskTitle] = useState("");
     let [UpdateTaskDescription, setUpdateTaskDescription] = useState("");
@@ -47,12 +47,13 @@ export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
             }
             return t;
         });
-        // update the tasks in localStorage
-        localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
-        updatedTasks = JSON.parse(localStorage.getItem("Tasks"));
-        // update the tasks 
+
         setTasks(updatedTasks);
+
+        localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
+       
         CoverUpdatePopup();
+        
         OpenSnackbarFunc();
     }
 
@@ -84,7 +85,7 @@ export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
                 </Box>
             </Dialog>
             {/* عرض Snackbar بعد تحديث المهمة */}
-            {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage="Task updated successfully" />}
+            {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage="Task was updated successfully" />}
         </>
     );
 }
