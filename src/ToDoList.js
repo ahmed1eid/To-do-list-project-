@@ -9,7 +9,6 @@ import Task from './Task';
 import AddTask from './AddTask';
 import { useEffect, useState } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
-import { v4 as uuidv4 } from 'uuid';
 import DeleteDialog from './DeleteDialog';
 import UpdateDialog from './UpdateDialog';
 export default function ToDoList() {
@@ -20,19 +19,12 @@ export default function ToDoList() {
     let [openDeletePopup, setOpenDeletePopup] = useState(false);
     let [openUpdatePopup, setOpenUpdatePopup] = useState(false);
 
-    const [Tasks, setTasks] = useState([
-        {
-            id: uuidv4(), title: "Task 1", description: "This is the first task." , IsCompleted:  false ,
-        },
-        {
-            id: uuidv4(), title: "Task 2", description: "This is the second task." , IsCompleted: false ,
-        }
-    ]);
+    const [Tasks, setTasks] = useState([]);
 
     const filteredTasks = Tasks.filter((task) => {
         if (AppareTasks === "active") return !task.IsCompleted;
         if (AppareTasks === "completed") return task.IsCompleted;
-        return true; // للـ "all"
+        return true;
     });
 
     useEffect(() => {
