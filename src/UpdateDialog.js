@@ -2,14 +2,16 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { Box } from '@mui/material';
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import { useContext } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
+import CustomizedSnackbar from './Snackbar';
 
 export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
+    const [OpenSnackBar, SetOpenSnackBar] = useState(false);
     let { Tasks, setTasks } = useContext(TasksContext);
-    let [UpdateTaskTitle, setUpdateTaskTitle] = useState(task.title);
-    let [UpdateTaskDescription, setUpdateTaskDescription] = useState(task.description);
+    let [UpdateTaskTitle, setUpdateTaskTitle] = useState("");
+    let [UpdateTaskDescription, setUpdateTaskDescription] = useState("");
     let styles = {
         position: 'fixed',
         top: '50%',
@@ -22,6 +24,17 @@ export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
         p: 4,
         zIndex: 1300,
     };
+
+    const OpenSnackbarFunc = () => {
+        SetOpenSnackBar(true);
+    };
+
+    useEffect(() => {
+        if (task) {
+            setUpdateTaskTitle(task.title || "");
+            setUpdateTaskDescription(task.description || "");
+        }
+    }, [task]);
 
     function UbdateTask() {
         let updatedTasks = Tasks.map((t) => {
@@ -39,6 +52,8 @@ export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
         updatedTasks = JSON.parse(localStorage.getItem("Tasks"));
         // update the tasks 
         setTasks(updatedTasks);
+        CoverUpdatePopup();
+        OpenSnackbarFunc();
     }
 
     const handleClose = () => {
@@ -47,26 +62,30 @@ export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
 
 
     return (
-        <Dialog onClose={handleClose} open={open}>
-            <Box sx={styles}>
-                <input
-                    value={UpdateTaskTitle} 
-                    onChange={(e) => setUpdateTaskTitle(e.target.value)} 
-                    type="text"
-                    placeholder="Task title" 
-                    style={{ width: '100%', marginBottom: '10px' }} 
-                />
-                <textarea 
-                    value={UpdateTaskDescription} 
-                    onChange={(e) => setUpdateTaskDescription(e.target.value)} 
-                    placeholder="Task description" 
-                    style={{ width: '100%', marginBottom: '10px' }} 
-                />
-                <Button 
-                onClick={UbdateTask}
-                variant="contained" color="primary" fullWidth>Save changes</Button>
-            </Box>
-        </Dialog>
+        <>
+            <Dialog onClose={handleClose} open={open}>
+                <Box sx={styles}>
+                    <input
+                        value={UpdateTaskTitle} 
+                        onChange={(e) => setUpdateTaskTitle(e.target.value)} 
+                        type="text"
+                        placeholder="Task title" 
+                        style={{ width: '100%', marginBottom: '10px' }} 
+                    />
+                    <textarea 
+                        value={UpdateTaskDescription} 
+                        onChange={(e) => setUpdateTaskDescription(e.target.value)} 
+                        placeholder="Task description" 
+                        style={{ width: '100%', marginBottom: '10px' }} 
+                    />
+                    <Button
+                    onClick={UbdateTask}
+                    variant="contained" color="primary" fullWidth>Save changes</Button>
+                </Box>
+            </Dialog>
+            {/* عرض Snackbar بعد تحديث المهمة */}
+            {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage="Task updated successfully" />}
+        </>
     );
 }
 

@@ -2,10 +2,12 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { Box } from '@mui/material';
-import { useContext } from 'react';
+import { useContext , useState } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
+import CustomizedSnackbar from './Snackbar';
 
-export default function DeleteDialog({ open , task , setOpenDeletePopup }) {
+export default function DeleteDialog({ open , task , CoverDeletePopup }) {
+    const [OpenSnackBar, SetOpenSnackBar] = useState(false);
     let { Tasks, setTasks } = useContext(TasksContext);
     let styles = {
         position: 'fixed',
@@ -20,34 +22,48 @@ export default function DeleteDialog({ open , task , setOpenDeletePopup }) {
         zIndex: 1300,
     };
 
+    const OpenSnackbarFunc = () => {
+        SetOpenSnackBar(true);
+    };
+
     const handleClose = () => {
-        setOpenDeletePopup(false);
+        CoverDeletePopup();
     };
 
     function DeleteTask() {
-        let updatedTasks = Tasks.filter((t) => t.id !== task.id);
-        // update the tasks in localStorage
-        localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
-        updatedTasks = JSON.parse(localStorage.getItem("Tasks"));
-        // update the tasks
+        // 1. إنشاء المصفوفة الجديدة بدون العنصر المراد حذفه
+        const updatedTasks = Tasks.filter((t) => t.id !== task.id);
+        
+        // 2. تحديث الحالة (State) فوراً لتحديث الواجهة
         setTasks(updatedTasks);
-        setOpenDeletePopup(false);
+        
+        // 3. حفظ النسخة الجديدة في التخزين المحلي
+        localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
+        
+        // 4. إغلاق النافذة
+        CoverDeletePopup();
+
+        OpenSnackbarFunc();
     }
 
     return (
+        <>
         <Dialog onClose={handleClose} open={open}>
-        <Box sx={styles}>
-            <h2>Are you sure you want to delete this task?</h2>
-            <Button
-            onClick={DeleteTask}
-            variant="contained" color="warning" fullWidth>delete task</Button>
-        </Box>
+            <Box sx={styles}>
+                <h2>Are you sure you want to delete this task?</h2>
+                <Button
+                onClick={DeleteTask}
+                variant="contained" color="warning" fullWidth>delete task</Button>
+            </Box>
         </Dialog>
+        {/* عرض Snackbar بعد حذف المهمة */}
+        {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage="Task deleted successfully" />}
+        </>
     );
 }
 
 DeleteDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     task: PropTypes.object.isRequired,
-    setOpenDeletePopup: PropTypes.func.isRequired
+    CoverDeletePopup: PropTypes.func.isRequired
 };

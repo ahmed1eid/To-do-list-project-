@@ -1,45 +1,33 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar'; 
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import Snackbar from '@mui/material/Snackbar';
+import { Fragment } from 'react';
+import { IconButton} from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 
-export default function CustomizedSnackbar() { 
-  const [open, setOpen] = React.useState(false);
+export default function CustomizedSnackbar({open, CloseSnackbar , massage = "Note archived"}) {
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        CloseSnackbar();
+    };
 
-  const handleClick = () => {
-    setOpen(true);
-  };
+    const action = (
+        <Fragment>
+            <IconButton onClick={handleClose} aria-label="complete" size="small" color="primary" >
+                <CheckIcon />
+            </IconButton>
+        </Fragment>
+    );
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
-
-  const action = (
-    <React.Fragment>
-      <Button color="secondary" size="small" onClick={handleClose}>
-        UNDO
-      </Button>
-      <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
-
-  return (
-    <div>
-      <Button onClick={handleClick}>Open Snackbar</Button>
-      {/* هنا نستخدم المكون الأصلي من MUI */}
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message="Note archived"
-        action={action}
-      />
-    </div>
-  );
+    return (
+        <div>
+            <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+                message={massage}
+                action={action}
+            />
+        </div>
+    );
 }

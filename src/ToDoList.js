@@ -12,7 +12,7 @@ import { TasksContext } from './Contexts/TasksContext';
 import { v4 as uuidv4 } from 'uuid';
 import DeleteDialog from './DeleteDialog';
 import UpdateDialog from './UpdateDialog';
-
+import CustomizedSnackbar from './Snackbar';
 export default function ToDoList() {
     let [AppareTasks, setAppareTasks] = useState("all");
 
@@ -30,13 +30,15 @@ export default function ToDoList() {
         }
     ]);
 
+    const filteredTasks = Tasks.filter((task) => {
+        if (AppareTasks === "active") return !task.IsCompleted;
+        if (AppareTasks === "completed") return task.IsCompleted;
+        return true; // للـ "all"
+    });
+
     useEffect(() => {
         setTasks(JSON.parse(localStorage.getItem("Tasks")) || []);
     }, []);
-
-    function SelectTask(task) {
-        setSelectedTask(task);
-    }
 
     return (
         <TasksContext.Provider value={{ Tasks, setTasks }}>
@@ -71,18 +73,18 @@ export default function ToDoList() {
                         variant={AppareTasks === "completed" ? "contained" : "outlined"}
                         onClick={() => setAppareTasks("completed")}>completed</Button>
                     </ButtonGroup>
-                    {Tasks.map((task) => {
-                        if (AppareTasks === "all") {
-                            return <Task task={task} key={task.id} setOpenDeletePopup={setOpenDeletePopup} AppareUpdatePopup={() => setOpenUpdatePopup(true)} SelectTask={SelectTask} />;
-                        }else if (AppareTasks === "active" && task.IsCompleted === false) {
-                            return <Task task={task} key={task.id} setOpenDeletePopup={setOpenDeletePopup} AppareUpdatePopup={() => setOpenUpdatePopup(true)} SelectTask={SelectTask} />;
-                        }else if (AppareTasks === "completed" && task.IsCompleted === true) {
-                            return <Task task={task} key={task.id} setOpenDeletePopup={setOpenDeletePopup} AppareUpdatePopup={() => setOpenUpdatePopup(true)} SelectTask={SelectTask} />;
-                        }
-                        return null;
-                    })}
+                    {filteredTasks.map((task) => (
+                        <Task 
+                            task={task} 
+                            key={task.id} 
+                            AppareDeletePopup={() => setOpenDeletePopup(true)} 
+                            AppareUpdatePopup={() => setOpenUpdatePopup(true)} 
+                            SelectTask={(task) => setSelectedTask(task)} 
+                        />
+                    ))}
                     <div style={{ position: 'absolute', bottom: 0 }}>
                         <AddTask />
+                        <CustomizedSnackbar/>
                     </div>
                 </Box>
             </Card>
@@ -96,9 +98,9 @@ export default function ToDoList() {
             <DeleteDialog
                 open={openDeletePopup}
                 task={SelectedTask}
-                setOpenDeletePopup={setOpenDeletePopup}
+                CoverDeletePopup={() => setOpenDeletePopup(false)}
             />
-
+            
         </TasksContext.Provider>
     );
 }

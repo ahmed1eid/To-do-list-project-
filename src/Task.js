@@ -2,12 +2,11 @@ import './App.css';
 import CheckIcon from '@mui/icons-material/Check';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from 'react';
-import { Card, IconButton, ClickAwayListener} from '@mui/material';
+import { Card, IconButton} from '@mui/material';
 import { useContext } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
 
-export default function Task({task , setOpenDeletePopup , SelectTask , AppareUpdatePopup}) {    
+export default function Task({task , AppareDeletePopup , SelectTask , AppareUpdatePopup}) {    
     let { Tasks, setTasks } = useContext(TasksContext);
 
     let CheckIconStyle = {
@@ -41,10 +40,6 @@ export default function Task({task , setOpenDeletePopup , SelectTask , AppareUpd
         }
     }
 
-    let AppareDeletePopup = () => {
-        setOpenDeletePopup((prev) => !prev);
-    };
-
     function taskCompleted() {
         let updatedTasks = Tasks.map((t) => {
             if (t.id === task.id) {
@@ -62,10 +57,14 @@ export default function Task({task , setOpenDeletePopup , SelectTask , AppareUpd
         setTasks(updatedTasks);
     }
 
-    SelectTask(task);
-
     function HandleEditClick() {
+        SelectTask(task);
         AppareUpdatePopup()
+    }
+
+    function HandleDeleteClick() {
+        SelectTask(task);
+        AppareDeletePopup()
     }
 
     return (
@@ -99,7 +98,7 @@ export default function Task({task , setOpenDeletePopup , SelectTask , AppareUpd
                     <BorderColorIcon />
                 </IconButton>
                 
-                <IconButton onClick={AppareDeletePopup} sx={DeleteIconStyle} aria-label="delete" size="small" color="warning" >
+                <IconButton onClick={HandleDeleteClick} sx={DeleteIconStyle} aria-label="delete" size="small" color="warning" >
                     <DeleteIcon />
                 </IconButton>
             </div>
