@@ -11,7 +11,7 @@ export default function AddTaskDialog({ open , setOpen }) {
     let [OpenSnackBar, SetOpenSnackBar] = useState(false);
     let [NewtaskTitle, setNewTaskTitle] = useState('');
     let [NewtaskDescription, setNewTaskDescription] = useState('');
-    let { Tasks, setTasks } = useContext(TasksContext);
+    let { Tasks, SetTasks } = useContext(TasksContext);
     let styles = {
         position: 'fixed',
         top: '50%',
@@ -41,7 +41,7 @@ export default function AddTaskDialog({ open , setOpen }) {
         IsCompleted: false
         };
 
-        setTasks([...Tasks, newTask]);
+        SetTasks([...Tasks, newTask]);
 
         localStorage.setItem("Tasks", JSON.stringify([...Tasks, newTask]));
 
@@ -49,7 +49,7 @@ export default function AddTaskDialog({ open , setOpen }) {
         setNewTaskDescription('');
 
         setOpen(false);
-        
+
         OpenSnackbarFunc();
     };
 

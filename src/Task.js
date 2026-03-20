@@ -8,7 +8,7 @@ import { TasksContext } from './Contexts/TasksContext';
 import CustomizedSnackbar from './Snackbar';
 
 export default function Task({task , AppareDeletePopup , SelectTask , AppareUpdatePopup}) {
-    let { Tasks, setTasks } = useContext(TasksContext);
+    let { Tasks, SetTasks } = useContext(TasksContext);
 
     let [OpenSnackBar, SetOpenSnackBar] = useState(false);
 
@@ -61,7 +61,7 @@ export default function Task({task , AppareDeletePopup , SelectTask , AppareUpda
         localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
         updatedTasks = JSON.parse(localStorage.getItem("Tasks"));
         // update the tasks
-        setTasks(updatedTasks);
+        SetTasks(updatedTasks);
         OpenSnackbarFunc();
     }
 

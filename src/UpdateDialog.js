@@ -9,7 +9,7 @@ import CustomizedSnackbar from './Snackbar';
 
 export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
     let [OpenSnackBar, SetOpenSnackBar] = useState(false);
-    let { Tasks, setTasks } = useContext(TasksContext);
+    let { Tasks, SetTasks } = useContext(TasksContext);
     let [UpdateTaskTitle, setUpdateTaskTitle] = useState("");
     let [UpdateTaskDescription, setUpdateTaskDescription] = useState("");
     let styles = {
@@ -48,7 +48,7 @@ export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
             return t;
         });
 
-        setTasks(updatedTasks);
+        SetTasks(updatedTasks);
 
         localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
        

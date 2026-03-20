@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Task from './Task';
 import AddTask from './AddTask';
-import { useEffect, useState } from 'react';
+import { useEffect, useState , useContext } from 'react';
 import { TasksContext } from './Contexts/TasksContext';
 import DeleteDialog from './DeleteDialog';
 import UpdateDialog from './UpdateDialog';
@@ -19,7 +19,7 @@ export default function ToDoList() {
     let [openDeletePopup, setOpenDeletePopup] = useState(false);
     let [openUpdatePopup, setOpenUpdatePopup] = useState(false);
 
-    const [Tasks, setTasks] = useState([]);
+    const { Tasks, SetTasks } = useContext(TasksContext);
 
     const filteredTasks = Tasks.filter((task) => {
         if (AppareTasks === "active") return !task.IsCompleted;
@@ -28,11 +28,11 @@ export default function ToDoList() {
     });
 
     useEffect(() => {
-        setTasks(JSON.parse(localStorage.getItem("Tasks")) || []);
-    }, []);
+        SetTasks(JSON.parse(localStorage.getItem("Tasks")) || []);
+    }, [SetTasks]);
 
     return (
-        <TasksContext.Provider value={{ Tasks, setTasks }}>
+        <>
             <Card style={{maxHeight: "80vh",overflow:"scroll"}} sx={{ minWidth: 275 }}>
                 <CardContent>
                     <Typography variant="h5" component="div">
@@ -90,7 +90,6 @@ export default function ToDoList() {
                 task={SelectedTask}
                 CoverDeletePopup={() => setOpenDeletePopup(false)}
             />
-            
-        </TasksContext.Provider>
+        </>    
     );
 }

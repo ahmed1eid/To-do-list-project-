@@ -8,7 +8,7 @@ import CustomizedSnackbar from './Snackbar';
 
 export default function DeleteDialog({ open , task , CoverDeletePopup }) {
     const [OpenSnackBar, SetOpenSnackBar] = useState(false);
-    let { Tasks, setTasks } = useContext(TasksContext);
+    let { Tasks, SetTasks } = useContext(TasksContext);
     let styles = {
         position: 'fixed',
         top: '50%',
@@ -33,7 +33,7 @@ export default function DeleteDialog({ open , task , CoverDeletePopup }) {
     function DeleteTask() {
         const updatedTasks = Tasks.filter((t) => t.id !== task.id);
         
-        setTasks(updatedTasks);
+        SetTasks(updatedTasks);
         
         localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
         
