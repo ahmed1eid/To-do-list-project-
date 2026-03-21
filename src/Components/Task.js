@@ -1,14 +1,14 @@
-import './App.css';
+import '../App.css';
 import CheckIcon from '@mui/icons-material/Check';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Card, IconButton} from '@mui/material';
 import { useContext , useState } from 'react';
-import { TasksContext } from './Contexts/TasksContext';
+import { TasksContext } from '../Contexts/TasksContext';
 import CustomizedSnackbar from './Snackbar';
 
 export default function Task({task , AppareDeletePopup , SelectTask , AppareUpdatePopup}) {
-    let { Tasks, SetTasks } = useContext(TasksContext);
+    let { dispatch } = useContext(TasksContext);
 
     let [OpenSnackBar, SetOpenSnackBar] = useState(false);
 
@@ -48,21 +48,9 @@ export default function Task({task , AppareDeletePopup , SelectTask , AppareUpda
     };
 
     function taskCompleted() {
-        let updatedTasks = Tasks.map((t) => {
-            if (t.id === task.id) {
-                return {
-                    ...t,
-                    IsCompleted: !task.IsCompleted,
-                };
-            }
-            return t;
-        });
-        // update the tasks in localStorage
-        localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
-        updatedTasks = JSON.parse(localStorage.getItem("Tasks"));
-        // update the tasks
-        SetTasks(updatedTasks);
+        dispatch({type:"COMPLETE_TASK",task})
         OpenSnackbarFunc();
+
     }
 
     function HandleEditClick() {

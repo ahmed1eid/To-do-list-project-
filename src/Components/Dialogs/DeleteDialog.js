@@ -2,13 +2,14 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { Box } from '@mui/material';
-import { useContext , useState } from 'react';
-import { TasksContext } from './Contexts/TasksContext';
-import CustomizedSnackbar from './Snackbar';
+import { useContext , useState  } from 'react';
+import { TasksContext } from '../../Contexts/TasksContext';
+import CustomizedSnackbar from '../Snackbar';
 
 export default function DeleteDialog({ open , task , CoverDeletePopup }) {
+
     const [OpenSnackBar, SetOpenSnackBar] = useState(false);
-    let { Tasks, SetTasks } = useContext(TasksContext);
+    let { dispatch } = useContext(TasksContext);
     let styles = {
         position: 'fixed',
         top: '50%',
@@ -22,21 +23,18 @@ export default function DeleteDialog({ open , task , CoverDeletePopup }) {
         zIndex: 1300,
     };
 
-    const OpenSnackbarFunc = () => {
-        SetOpenSnackBar(true);
-    };
-
     const handleClose = () => {
         CoverDeletePopup();
     };
 
+    const OpenSnackbarFunc = () => {
+        SetOpenSnackBar(true);
+    };
+
+
     function DeleteTask() {
-        const updatedTasks = Tasks.filter((t) => t.id !== task.id);
-        
-        SetTasks(updatedTasks);
-        
-        localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
-        
+        dispatch({ type: 'DELETE_TASK', task });
+
         CoverDeletePopup();
 
         OpenSnackbarFunc();

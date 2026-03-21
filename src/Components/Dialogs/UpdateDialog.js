@@ -4,12 +4,12 @@ import Dialog from '@mui/material/Dialog';
 import { Box } from '@mui/material';
 import { useState , useEffect } from 'react';
 import { useContext } from 'react';
-import { TasksContext } from './Contexts/TasksContext';
-import CustomizedSnackbar from './Snackbar';
+import { TasksContext } from '../../Contexts/TasksContext';
+import CustomizedSnackbar from '../Snackbar';
 
 export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
     let [OpenSnackBar, SetOpenSnackBar] = useState(false);
-    let { Tasks, SetTasks } = useContext(TasksContext);
+    let { dispatch } = useContext(TasksContext);
     let [UpdateTaskTitle, setUpdateTaskTitle] = useState("");
     let [UpdateTaskDescription, setUpdateTaskDescription] = useState("");
     let styles = {
@@ -37,20 +37,7 @@ export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
     }, [task]);
 
     function UbdateTask() {
-        let updatedTasks = Tasks.map((t) => {
-            if (t.id === task.id) {
-                return {
-                    ...t,
-                    title: UpdateTaskTitle,
-                    description: UpdateTaskDescription
-                };
-            }
-            return t;
-        });
-
-        SetTasks(updatedTasks);
-
-        localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
+        dispatch({type:"UPDATE_TASK",task,UpdateTaskTitle,UpdateTaskDescription})
        
         CoverUpdatePopup();
         

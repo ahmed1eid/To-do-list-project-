@@ -1,4 +1,4 @@
-import './App.css';
+import '../App.css';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Task from './Task';
 import AddTask from './AddTask';
-import { useEffect, useState , useContext } from 'react';
-import { TasksContext } from './Contexts/TasksContext';
-import DeleteDialog from './DeleteDialog';
-import UpdateDialog from './UpdateDialog';
+import {  useState , useContext } from 'react';
+import { TasksContext } from '../Contexts/TasksContext';
+import DeleteDialog from './Dialogs/DeleteDialog';
+import UpdateDialog from './Dialogs/UpdateDialog';
 export default function ToDoList() {
     let [AppareTasks, setAppareTasks] = useState("all");
 
@@ -19,17 +19,13 @@ export default function ToDoList() {
     let [openDeletePopup, setOpenDeletePopup] = useState(false);
     let [openUpdatePopup, setOpenUpdatePopup] = useState(false);
 
-    const { Tasks, SetTasks } = useContext(TasksContext);
+    const { Tasks } = useContext(TasksContext);
 
     const filteredTasks = Tasks.filter((task) => {
         if (AppareTasks === "active") return !task.IsCompleted;
         if (AppareTasks === "completed") return task.IsCompleted;
         return true;
     });
-
-    useEffect(() => {
-        SetTasks(JSON.parse(localStorage.getItem("Tasks")) || []);
-    }, [SetTasks]);
 
     return (
         <>

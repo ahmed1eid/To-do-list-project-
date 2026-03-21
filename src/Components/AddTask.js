@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
-import AddTaskDialog from './AddTaskDialog';
+import AddTaskDialog from './Dialogs/AddTaskDialog';
 
 export default function AddTask() {
     const [open, setOpen] = useState(false);

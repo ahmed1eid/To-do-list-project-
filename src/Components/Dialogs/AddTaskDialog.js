@@ -3,15 +3,15 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { Box } from '@mui/material';
 import { useContext , useState } from 'react';
-import { TasksContext } from './Contexts/TasksContext';
-import { v4 as uuidv4 } from 'uuid';
-import CustomizedSnackbar from './Snackbar';
+import { TasksContext } from '../../Contexts/TasksContext';
+import CustomizedSnackbar from '../Snackbar';
 
 export default function AddTaskDialog({ open , setOpen }) {
+    let { dispatch } = useContext(TasksContext);
     let [OpenSnackBar, SetOpenSnackBar] = useState(false);
     let [NewtaskTitle, setNewTaskTitle] = useState('');
     let [NewtaskDescription, setNewTaskDescription] = useState('');
-    let { Tasks, SetTasks } = useContext(TasksContext);
+    
     let styles = {
         position: 'fixed',
         top: '50%',
@@ -34,22 +34,14 @@ export default function AddTaskDialog({ open , setOpen }) {
     };
 
     const SaveTask = () => {
-        const newTask = {
-        id: uuidv4(),
-        title: NewtaskTitle,
-        description: NewtaskDescription,
-        IsCompleted: false
-        };
-
-        SetTasks([...Tasks, newTask]);
-
-        localStorage.setItem("Tasks", JSON.stringify([...Tasks, newTask]));
+        
+        dispatch({ type: 'ADD_TASK', NewtaskTitle , NewtaskDescription   })
 
         setNewTaskTitle('');
         setNewTaskDescription('');
-
+    
         setOpen(false);
-
+    
         OpenSnackbarFunc();
     };
 
@@ -81,5 +73,5 @@ export default function AddTaskDialog({ open , setOpen }) {
 
 AddTaskDialog.propTypes = {
     open: PropTypes.bool.isRequired,
-    setOpenDeletePopup: PropTypes.func.isRequired
+    setOpen: PropTypes.func.isRequired
 };
