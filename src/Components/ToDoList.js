@@ -1,4 +1,5 @@
 import '../App.css'; // Styles
+import { CardContentStyle , CardHeaderSX , CardHeaderStyle } from '../Styles/Styles';
 // Mui components
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -33,7 +34,7 @@ export default function ToDoList() {
 
     return (
         <>
-            <Card style={{maxHeight: "80vh",overflow:"scroll"}} sx={{ width: { xs: '95vw', sm: '80vw', md: 600 }, maxWidth: '100%' }}>
+            <Card style={CardHeaderStyle} sx={CardHeaderSX}>
                 <CardContent>
                     <Typography variant="h5" component="div">
                         My ToDos
@@ -41,16 +42,7 @@ export default function ToDoList() {
                 </CardContent>
 
                 <Box
-                    sx={{
-                        width: { xs: '95%', sm: 500 }, 
-                        m: "20px auto", 
-                        position: 'relative', 
-                        minHeight: 400, 
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        pb: 10
-                    }}
+                    sx={CardContentStyle}
                     >
                     <ButtonGroup variant="outlined" aria-label="Basic button group">
                         <Button

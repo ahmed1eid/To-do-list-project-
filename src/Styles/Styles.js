@@ -95,3 +95,18 @@ export let TaskStyle =  {
         boxShadow: '0 10px 20px rgba(0,0,0,0.3)',
     }
 }
+
+export let CardContentStyle = {
+    width: { xs: '95%', sm: 500 }, 
+    m: "20px auto", 
+    position: 'relative', 
+    minHeight: 400, 
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    pb: 10
+}
+
+export let CardHeaderSX = { width: { xs: '95vw', sm: '80vw', md: 600 }, maxWidth: '100%' }
+
+export let CardHeaderStyle = {maxHeight: "80vh",overflow:"scroll"}
