@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import Button from '@mui/material/Button';
+import { useState } from 'react';// Hook
+import Button from '@mui/material/Button';// Mui component
 import AddTaskDialog from './Dialogs/AddTaskDialog';
 
 export default function AddTask() {

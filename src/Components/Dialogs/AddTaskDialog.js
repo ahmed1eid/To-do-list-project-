@@ -1,29 +1,19 @@
 import PropTypes from 'prop-types';
+// Mui components
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { Box } from '@mui/material';
+import CustomizedSnackbar from '../Snackbar';
+// Hooks
 import { useContext , useState } from 'react';
 import { TasksContext } from '../../Contexts/TasksContext';
-import CustomizedSnackbar from '../Snackbar';
+import { AddTaskDialogStyle } from '../../Styles/Styles';// Styles
 
 export default function AddTaskDialog({ open , setOpen }) {
     let { dispatch } = useContext(TasksContext);
     let [OpenSnackBar, SetOpenSnackBar] = useState(false);
     let [NewtaskTitle, setNewTaskTitle] = useState('');
     let [NewtaskDescription, setNewTaskDescription] = useState('');
-    
-    let styles = {
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        borderRadius: '12px',
-        boxShadow: 24,
-        p: 4,
-        zIndex: 1300,
-    };
 
     const handleClose = () => {
         setOpen(false);
@@ -48,7 +38,7 @@ export default function AddTaskDialog({ open , setOpen }) {
     return (
         <>
             <Dialog onClose={handleClose} open={open}>
-                <Box sx={styles}>
+                <Box sx={AddTaskDialogStyle}>
                     <input 
                     value={NewtaskTitle} 
                     onChange={(e) => setNewTaskTitle(e.target.value)} 
@@ -62,11 +52,16 @@ export default function AddTaskDialog({ open , setOpen }) {
                     placeholder="Task description" 
                     style={{ width: '100%', marginBottom: '10px' }} 
                     />
-                    <Button onClick={SaveTask} variant="contained" color="primary" fullWidth>Save Task</Button>
+                    <Button disabled={(NewtaskTitle && NewtaskDescription )?false:true} onClick={SaveTask} variant="contained" color="primary" fullWidth>Save Task</Button>
                 </Box>
             </Dialog>
             {/* عرض Snackbar بعد تحديث المهمة */}
-            {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage="Task has been added successfully" />}
+            {OpenSnackBar && <CustomizedSnackbar 
+                open={OpenSnackBar} 
+                CloseSnackbar={() => SetOpenSnackBar(false)} 
+                massage="Task has been added successfully"
+                background= {'#1d2482'}
+            />}
         </>
     );
 }

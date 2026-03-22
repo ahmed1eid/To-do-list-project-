@@ -1,13 +1,11 @@
-import Snackbar from '@mui/material/Snackbar';
 import { Fragment } from 'react';
+// Mui components
+import Snackbar from '@mui/material/Snackbar';
 import { IconButton} from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 
-export default function CustomizedSnackbar({open, CloseSnackbar , massage = "Note archived"}) {
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
+export default function CustomizedSnackbar({open, CloseSnackbar , massage = "Note archived" , background= '#2e7d32'}) {
+    const handleClose = () => {
         CloseSnackbar();
     };
 
@@ -23,10 +21,19 @@ export default function CustomizedSnackbar({open, CloseSnackbar , massage = "Not
         <div>
             <Snackbar
                 open={open}
-                autoHideDuration={4000}
+                autoHideDuration={3000}
                 onClose={handleClose}
                 message={massage}
                 action={action}
+                ContentProps={{
+                    sx: {
+                    background: background,
+                    color: '#fff',
+                    fontWeight: 'bold',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                    }
+                }}
             />
         </div>
     );

@@ -1,47 +1,20 @@
+import { TasksContext } from '../Contexts/TasksContext';
+// Styles
 import '../App.css';
+import { CheckIconStyleTrue , CheckIconStyleFalce , EditIconStyle , DeleteIconStyle , TaskStyle  } from '../Styles/Styles';
+// Mui components
 import CheckIcon from '@mui/icons-material/Check';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Card, IconButton} from '@mui/material';
-import { useContext , useState } from 'react';
-import { TasksContext } from '../Contexts/TasksContext';
 import CustomizedSnackbar from './Snackbar';
+// Hooks
+import { useContext , useState } from 'react';
 
 export default function Task({task , AppareDeletePopup , SelectTask , AppareUpdatePopup}) {
     let { dispatch } = useContext(TasksContext);
 
     let [OpenSnackBar, SetOpenSnackBar] = useState(false);
-
-    let CheckIconStyle = {
-        backgroundColor: task.IsCompleted ? '#04f629' : '#ffffff',
-        color: task.IsCompleted ? '#ffffff' : '#04f629',
-        border : task.IsCompleted ?'2px solid #ffffff' : '2px solid #04f629',
-        marginRight: '10px',
-        boxShadow: '0 7px 7px rgba(0,0,0,0.7)',
-        '&:hover': {
-            backgroundColor: '#e0e0e0',
-        }
-    }
-
-    let EditIconStyle = {
-        backgroundColor: '#ffffff',
-        color: '#057ef7',
-        marginRight: '10px',
-        boxShadow: '0 7px 7px rgba(0,0,0,0.7)',
-        '&:hover': {
-            backgroundColor: '#e0e0e0',
-        }
-    }
-
-    let DeleteIconStyle = {
-        backgroundColor: '#ffffff',
-        color: '#f44336',
-        marginRight: '10px',
-        boxShadow: '0 7px 7px rgba(0,0,0,0.7)',
-        '&:hover': {
-            backgroundColor: '#e0e0e0',
-        }
-    }
 
     const OpenSnackbarFunc = () => {
         SetOpenSnackBar(true);
@@ -65,29 +38,14 @@ export default function Task({task , AppareDeletePopup , SelectTask , AppareUpda
 
     return (
         <>
-            <Card sx={{
-                backgroundColor: '#033566',
-                color: 'white', 
-                width: 400, 
-                margin: '15px auto',
-                padding: '15px',
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                transition: 'all 0.3s ease',
-                transformOrigin: 'top',
-                '&:hover': {
-                    transform: 'scaleY(1.05)',
-                    boxShadow: '0 10px 20px rgba(0,0,0,0.3)',
-                }
-            }}>
+            <Card sx={TaskStyle}>
                 <div style={{ flex: 1 }}>
                     <h3 style={{ margin: 0 , textDecoration: task.IsCompleted ? 'line-through' : 'none'  }}>{task.title}</h3>
                     <p style={{ margin: '5px 20px 0 0', fontSize: '14px', color: '#e0e0e0' }}>{task.description}</p>
                 </div>
                 
                 <div >
-                    <IconButton onClick={taskCompleted} sx={CheckIconStyle} aria-label="complete" size="small" color="primary" >
+                    <IconButton onClick={taskCompleted} sx={task.IsCompleted ?CheckIconStyleTrue : CheckIconStyleFalce} aria-label="complete" size="small" color="primary" >
                         <CheckIcon />
                     </IconButton>
 
@@ -101,7 +59,12 @@ export default function Task({task , AppareDeletePopup , SelectTask , AppareUpda
                 </div>
             </Card>
             {/* عرض Snackbar بعد تحديث المهمة */}
-            {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage={task.IsCompleted ? `Task (${task.title}) was successfully completed` : `Task (${task.title}) is still active`} />}
+            {OpenSnackBar && <CustomizedSnackbar 
+                open={OpenSnackBar} 
+                CloseSnackbar={() => SetOpenSnackBar(false)} 
+                massage={task.IsCompleted ? `Task (${task.title}) was successfully completed` : `Task (${task.title}) is still active` }
+                background= {task.IsCompleted ?'#2f8033':'#8e3636'}
+            />}
         </>
     );
 }

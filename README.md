@@ -74,7 +74,7 @@ npm start
 ```
 
 The application will run on:
-👉 [http://localhost:3000](http://localhost:3000)
+👉 [http://localhost:3000/todolist](http://localhost:3000/todolist)
 
 ---
 

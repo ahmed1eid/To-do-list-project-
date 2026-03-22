@@ -1,27 +1,17 @@
 import PropTypes from 'prop-types';
+// Mui components
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { Box } from '@mui/material';
+import CustomizedSnackbar from '../Snackbar';
+// Hooks
 import { useContext , useState  } from 'react';
 import { TasksContext } from '../../Contexts/TasksContext';
-import CustomizedSnackbar from '../Snackbar';
+import { DeleteDialogstyles } from '../../Styles/Styles';// Styles
 
 export default function DeleteDialog({ open , task , CoverDeletePopup }) {
-
     const [OpenSnackBar, SetOpenSnackBar] = useState(false);
     let { dispatch } = useContext(TasksContext);
-    let styles = {
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        borderRadius: '12px',
-        boxShadow: 24,
-        p: 4,
-        zIndex: 1300,
-    };
 
     const handleClose = () => {
         CoverDeletePopup();
@@ -43,7 +33,7 @@ export default function DeleteDialog({ open , task , CoverDeletePopup }) {
     return (
         <>
         <Dialog onClose={handleClose} open={open}>
-            <Box sx={styles}>
+            <Box sx={DeleteDialogstyles}>
                 <h2>Are you sure you want to delete this task?</h2>
                 <Button
                 onClick={DeleteTask}
@@ -51,7 +41,12 @@ export default function DeleteDialog({ open , task , CoverDeletePopup }) {
             </Box>
         </Dialog>
         {/* عرض Snackbar بعد حذف المهمة */}
-        {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage="Task was deleted successfully" />}
+        {OpenSnackBar && <CustomizedSnackbar 
+        open={OpenSnackBar} 
+        CloseSnackbar={() => SetOpenSnackBar(false)} 
+        massage="Task was deleted successfully"
+        background= '#ed0707'
+        />}
         </>
     );
 }

@@ -1,29 +1,19 @@
 import PropTypes from 'prop-types';
+// Mui components
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { Box } from '@mui/material';
-import { useState , useEffect } from 'react';
-import { useContext } from 'react';
-import { TasksContext } from '../../Contexts/TasksContext';
 import CustomizedSnackbar from '../Snackbar';
+// Hooks
+import { useState , useEffect , useContext } from 'react';
+import { TasksContext } from '../../Contexts/TasksContext';
+import { UpdateDialogstyles } from '../../Styles/Styles';// Styles
 
 export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
     let [OpenSnackBar, SetOpenSnackBar] = useState(false);
     let { dispatch } = useContext(TasksContext);
     let [UpdateTaskTitle, setUpdateTaskTitle] = useState("");
     let [UpdateTaskDescription, setUpdateTaskDescription] = useState("");
-    let styles = {
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        borderRadius: '12px',
-        boxShadow: 24,
-        p: 4,
-        zIndex: 1300,
-    };
 
     const OpenSnackbarFunc = () => {
         SetOpenSnackBar(true);
@@ -46,13 +36,17 @@ export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
 
     const handleClose = () => {
         CoverUpdatePopup();
+        if (task) {
+            setUpdateTaskTitle(task.title || "");
+            setUpdateTaskDescription(task.description || "");
+        }
     };
 
 
     return (
         <>
             <Dialog onClose={handleClose} open={open}>
-                <Box sx={styles}>
+                <Box sx={UpdateDialogstyles}>
                     <input
                         value={UpdateTaskTitle} 
                         onChange={(e) => setUpdateTaskTitle(e.target.value)} 
@@ -67,12 +61,16 @@ export default function UpdateDialog({ open , task , CoverUpdatePopup }) {
                         style={{ width: '100%', marginBottom: '10px' }} 
                     />
                     <Button
-                    onClick={UbdateTask}
-                    variant="contained" color="primary" fullWidth>Save changes</Button>
+                    onClick={UbdateTask} disabled={(UpdateTaskTitle && UpdateTaskDescription)?false:true} variant="contained" color="primary" fullWidth>Save changes</Button>
                 </Box>
             </Dialog>
             {/* عرض Snackbar بعد تحديث المهمة */}
-            {OpenSnackBar && <CustomizedSnackbar open={OpenSnackBar} CloseSnackbar={() => SetOpenSnackBar(false)} massage="Task was updated successfully" />}
+            {OpenSnackBar && <CustomizedSnackbar 
+            open={OpenSnackBar} 
+            CloseSnackbar={() => SetOpenSnackBar(false)} 
+            massage="Task was updated successfully"
+            background= '#2e7d32'
+            />}
         </>
     );
 }

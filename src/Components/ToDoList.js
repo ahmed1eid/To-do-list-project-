@@ -1,16 +1,20 @@
-import '../App.css';
+import '../App.css'; // Styles
+// Mui components
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import Task from './Task';
-import AddTask from './AddTask';
+// Hooks
 import {  useState , useContext } from 'react';
 import { TasksContext } from '../Contexts/TasksContext';
+// Components
+import Task from './Task';
+import AddTask from './AddTask';
 import DeleteDialog from './Dialogs/DeleteDialog';
 import UpdateDialog from './Dialogs/UpdateDialog';
+
 export default function ToDoList() {
     let [AppareTasks, setAppareTasks] = useState("all");
 
