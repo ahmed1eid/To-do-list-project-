@@ -33,7 +33,7 @@ export default function ToDoList() {
 
     return (
         <>
-            <Card style={{maxHeight: "80vh",overflow:"scroll"}} sx={{ minWidth: 275 }}>
+            <Card style={{maxHeight: "80vh",overflow:"scroll"}} sx={{ width: { xs: '95vw', sm: '80vw', md: 600 }, maxWidth: '100%' }}>
                 <CardContent>
                     <Typography variant="h5" component="div">
                         My ToDos
@@ -42,8 +42,7 @@ export default function ToDoList() {
 
                 <Box
                     sx={{
-                        minWidth: 275,
-                        maxWidth: 500, 
+                        width: { xs: '95%', sm: 500 }, 
                         m: "20px auto", 
                         position: 'relative', 
                         minHeight: 400, 
