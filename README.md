@@ -2,9 +2,13 @@
 
 A fast, scalable, and responsive To-Do management application built with **React.js** and **Material UI (MUI)**. This project demonstrates clean architecture using the **Context API** and **useReducer** for predictable and maintainable state management.
 
-![App Screenshot](Todos_list.png)
+<img width="618" height="798" alt="Todos_list" src="https://github.com/user-attachments/assets/34379ebd-531e-46f6-9dc6-950123ddfd54" />
+
 
 ---
+
+## 🌐 Live Demo:
+* 👉 https://precious-salamander-c4e982.netlify.app/
 
 ## 🚀 Features
 
