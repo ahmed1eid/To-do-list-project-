@@ -2,7 +2,8 @@
 
 A fast, scalable, and responsive To-Do management application built with **React.js** and **Material UI (MUI)**. This project demonstrates clean architecture using the **Context API** and **useReducer** for predictable and maintainable state management.
 
-<img width="618" height="798" alt="Todos_list" src="https://github.com/user-attachments/assets/34379ebd-531e-46f6-9dc6-950123ddfd54" />
+<img width="1920" height="910" alt="Todos_list" src="https://github.com/user-attachments/assets/8960dc52-831d-458f-8e04-289349596ad3" />
+
 
 
 ---
